@@ -1,0 +1,25 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Microsoft.AspNetCore.Authorization;
+
+public static partial class {{ assembly }}PolicyRegister
+{
+    public static string[] AllClaims = [ 
+        {{~ for p in policies ~}}
+        {{ p.claims }},
+        {{~ end ~}}
+    ];
+
+    public static IServiceCollection Add{{ assembly }}Policies(this IServiceCollection services, string claimType = "Permission")
+    {
+        services.Configure<AuthorizationOptions>(opt =>
+        {
+            {{~ for p in policies ~}}
+            Add{{ p.name }}Policy(opt, claimType);
+            {{~ end ~}}
+        });
+
+        return services;
+    }
+}

@@ -1,0 +1,16 @@
+using Microsoft.AspNetCore.Authorization;
+
+namespace Microsoft.AspNetCore.Authorization;
+
+public static partial class {{ assembly }}PolicyRegister
+{
+    private static AuthorizationOptions Add{{ policy.name }}Policy(this AuthorizationOptions opt, string claimType)
+    {
+        opt.AddPolicy({{ policy.class_path }}.Name, policy =>
+        {
+            policy.RequireClaim(claimType, {{ policy.class_path }}.Claims);
+        });
+
+        return opt;
+    }
+}

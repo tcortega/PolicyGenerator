@@ -1,0 +1,6 @@
+﻿using System;
+
+namespace PolicyGenerator;
+
+[AttributeUsage(AttributeTargets.Class)]
+public class PolicyAttribute : Attribute;
