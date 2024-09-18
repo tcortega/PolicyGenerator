@@ -1,72 +1,80 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>netstandard2.0</TargetFramework>
-		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
-		<IsRoslynComponent>true</IsRoslynComponent>
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+        <IsRoslynComponent>true</IsRoslynComponent>
 
-		<LangVersion>latest</LangVersion>
-		<Nullable>enable</Nullable>
-		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <LangVersion>latest</LangVersion>
+        <Nullable>enable</Nullable>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 
-		<IsPackable>true</IsPackable>
-		<IncludeBuildOutput>false</IncludeBuildOutput>
-		<NoWarn>NU5128</NoWarn>
-	</PropertyGroup>
+        <IsPackable>true</IsPackable>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <NoWarn>NU5128</NoWarn>
+    </PropertyGroup>
 
-	<PropertyGroup Label="Nuget">
-		<Title>PolicyGenerator</Title>
-		<Description>A source generator for generating policies with claims and registering them automatically.</Description>
+    <PropertyGroup Label="Nuget">
+        <Title>PolicyGenerator</Title>
+        <Description>A source generator for generating policies with claims and registering them automatically.</Description>
 
-		<Authors>tcortega</Authors>
+        <Authors>tcortega</Authors>
 
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
 
-		<PublishRepositoryUrl>true</PublishRepositoryUrl>
-		<RepositoryUrl>https://github.com/tcortega/PolicyGenerator</RepositoryUrl>
-	</PropertyGroup>
-	
-	<ItemGroup>
-		<None Include="../../README.md" Pack="true" PackagePath="/" />
-		<None Include="$(PkgScriban)/lib/netstandard2.0/Scriban.dll" Pack="true" PackagePath="analyzers/roslyn4.8/dotnet/cs" Visible="false" />
-		<None Include="../PolicyGenerator/bin/$(Configuration)/netstandard2.0/PolicyGenerator.dll" Pack="true" PackagePath="analyzers/roslyn4.8/dotnet/cs" Visible="true" />
-	</ItemGroup>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <RepositoryUrl>https://github.com/tcortega/PolicyGenerator</RepositoryUrl>
+    </PropertyGroup>
 
-	<ItemGroup>
-		<None Remove="Templates\*.sbntxt"/>
-		<EmbeddedResource Include="Templates\*.sbntxt"/>
-	</ItemGroup>
+    <ItemGroup>
+        <None Include="../../README.md" Pack="true" PackagePath="/"/>
+        <None Include="$(PkgScriban)/lib/netstandard2.0/Scriban.dll" Pack="true" PackagePath="analyzers/roslyn4.8/dotnet/cs" Visible="false"/>
+        <None Include="../PolicyGenerator/bin/$(Configuration)/netstandard2.0/PolicyGenerator.dll" Pack="true" PackagePath="analyzers/roslyn4.8/dotnet/cs" Visible="true"/>
+    </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.2"/>
-		<PackageReference Include="PolySharp" Version="1.14.1">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="Scriban" Version="5.10.0" GeneratePathProperty="true" />
-	</ItemGroup>
+    <ItemGroup>
+        <None Remove="Templates\*.sbntxt"/>
+        <EmbeddedResource Include="Templates\*.sbntxt"/>
+    </ItemGroup>
 
-	<PropertyGroup>
-		<GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>
-	</PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.2"/>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="MinVer" Version="6.0.0">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="PolySharp" Version="1.14.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Scriban" Version="5.10.0" GeneratePathProperty="true"/>
+    </ItemGroup>
 
-	<Target Name="GetDependencyTargetPaths">
-		<ItemGroup>
-			<TargetPathWithTargetPlatformMoniker Include="$(PkgScriban)/lib/netstandard2.0/Scriban.dll" IncludeRuntimeDependency="false" />
-		</ItemGroup>
-	</Target>
+    <PropertyGroup>
+        <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>
+    </PropertyGroup>
 
-	<PropertyGroup Label="MinVer">
-		<MinVerAutoIncrement>minor</MinVerAutoIncrement>
-		<MinVerDefaultPreReleaseIdentifiers>preview.0</MinVerDefaultPreReleaseIdentifiers>
-		<MinVerTagPrefix>v</MinVerTagPrefix>
-	</PropertyGroup>
+    <Target Name="GetDependencyTargetPaths">
+        <ItemGroup>
+            <TargetPathWithTargetPlatformMoniker Include="$(PkgScriban)/lib/netstandard2.0/Scriban.dll" IncludeRuntimeDependency="false"/>
+        </ItemGroup>
+    </Target>
 
-	<PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
-		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-		<EmbedUntrackedSources>true</EmbedUntrackedSources>
-		<CollectCoverage>true</CollectCoverage>
-		<CoverletOutputFormat>opencover</CoverletOutputFormat>
-	</PropertyGroup>
+    <PropertyGroup Label="MinVer">
+        <MinVerAutoIncrement>minor</MinVerAutoIncrement>
+        <MinVerDefaultPreReleaseIdentifiers>preview.0</MinVerDefaultPreReleaseIdentifiers>
+        <MinVerTagPrefix>v</MinVerTagPrefix>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <CollectCoverage>true</CollectCoverage>
+        <CoverletOutputFormat>opencover</CoverletOutputFormat>
+    </PropertyGroup>
 </Project>
