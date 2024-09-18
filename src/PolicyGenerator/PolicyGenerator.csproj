@@ -40,7 +40,7 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Scriban" Version="5.10.0" />
+		<PackageReference Include="Scriban" Version="5.10.0" GeneratePathProperty="true" />
 	</ItemGroup>
 
 	<PropertyGroup>
