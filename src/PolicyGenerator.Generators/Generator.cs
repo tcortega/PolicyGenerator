@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.Text;
 namespace PolicyGenerator.Generators;
 
 [Generator]
-public sealed partial class Generator : IIncrementalGenerator
+public sealed partial class PoliciesGenerator : IIncrementalGenerator
 {
 	public void Initialize(IncrementalGeneratorInitializationContext context)
 	{

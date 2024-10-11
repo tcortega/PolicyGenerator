@@ -1,6 +1,6 @@
 namespace PolicyGenerator.Generators;
 
-public sealed partial class Generator
+public sealed partial class PoliciesGenerator
 {
 	private sealed record PolicyDescriptor
 	{

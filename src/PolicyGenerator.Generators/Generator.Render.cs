@@ -4,7 +4,7 @@ using Scriban;
 
 namespace PolicyGenerator.Generators;
 
-public sealed partial class Generator
+public sealed partial class PoliciesGenerator
 {
 	private static void RenderPolicy(SourceProductionContext context, PolicyDescriptor policy, string assemblyName,
 		Template template)

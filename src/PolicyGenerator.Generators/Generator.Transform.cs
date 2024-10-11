@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace PolicyGenerator.Generators;
 
-public sealed partial class Generator
+public sealed partial class PoliciesGenerator
 {
 	private static PolicyDescriptor? TransformPolicy(GeneratorAttributeSyntaxContext context, CancellationToken token)
 	{

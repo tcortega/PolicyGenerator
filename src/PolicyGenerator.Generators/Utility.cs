@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Scriban;
 
 namespace PolicyGenerator.Generators;
@@ -10,7 +10,7 @@ internal static class Utility
 		using var stream = Assembly
 			.GetExecutingAssembly()
 			.GetManifestResourceStream(
-				$"PolicyGenerator.Templates.{name}.sbntxt"
+				$"PolicyGenerator.Generators.Templates.{name}.sbntxt"
 			)!;
 
 		using var reader = new StreamReader(stream);
