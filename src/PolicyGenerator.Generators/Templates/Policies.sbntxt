@@ -11,10 +11,11 @@ public static partial class {{ assembly }}PolicyRegister
         {{~ end ~}}
     ];
 
-    public static IServiceCollection Add{{ assembly }}Policies(this IServiceCollection services, string claimType = "Permission")
+    public static AuthorizationBuilder Add{{ assembly }}Policies(this IServiceCollection services, 
+    	string claimType = "Permission")
     	=> services.AddAuthorizationBuilder()
-    	{{~ for p in policies ~}}
-        .AddPolicy({{ p.class_path }}.Name, p => p.RequireClaim(claimType, {{ p.claims }}))
-        {{~ end ~}}
-        ;
+    		{{~ for p in policies ~}}
+        	.AddPolicy({{ p.class_path }}.Name, p => p.RequireClaim(claimType, {{ {{ p.class_path }}.Claims }}))
+        	{{~ end ~}}
+        	;
 }
