@@ -1,6 +1,7 @@
 using Microsoft.CodeAnalysis;
 
 namespace PolicyGenerator.Tests.Helpers;
+
 public static class ReferenceAssemblyHelpers
 {
 	public static IEnumerable<MetadataReference> GetAdditionalReferences(this DriverReferenceAssemblies assemblies)
@@ -10,7 +11,8 @@ public static class ReferenceAssemblyHelpers
 
 		if (assemblies is DriverReferenceAssemblies.Msdi)
 		{
-			return [
+			return
+			[
 				MetadataReference.CreateFromFile("./Microsoft.Extensions.DependencyInjection.dll"),
 				MetadataReference.CreateFromFile("./Microsoft.Extensions.DependencyInjection.Abstractions.dll"),
 			];
