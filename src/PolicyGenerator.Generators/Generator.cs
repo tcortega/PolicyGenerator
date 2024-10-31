@@ -27,12 +27,6 @@ public sealed partial class PoliciesGenerator : IIncrementalGenerator
 				.Trim()
 			);
 
-		var perPolicyTemplate = Utility.GetTemplate("Policy");
-		context.RegisterSourceOutput(
-			policies.Combine(assemblyName),
-			(spc, p) => RenderPolicy(spc, p.Left!, p.Right, perPolicyTemplate)
-		);
-
 		var allPoliciesTemplate = Utility.GetTemplate("Policies");
 		context.RegisterSourceOutput(
 			policies.Collect().Combine(assemblyName),
