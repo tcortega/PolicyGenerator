@@ -35,7 +35,7 @@ public sealed partial class PoliciesGenerator
 		return new PolicyDescriptor
 		{
 			Name = policyName,
-			Claims = claims is null ? null : string.Join(",", claims),
+			Claims = claims,
 			Roles = roles,
 			AuthenticationSchemes = authenticationSchemes,
 			ClassPath = symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)

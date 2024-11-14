@@ -5,24 +5,20 @@ namespace Microsoft.AspNetCore.Authorization;
 
 public static partial class {{ assembly }}PolicyRegister
 {
-    public static string[] AllClaims = [ 
-        {{~ for p in policies ~}}
-        {{ p.claims }},
-        {{~ end ~}}
-    ];
+    public static string[] AllClaims = [all_claims];
 
     public static AuthorizationBuilder Add{{ assembly }}Policies(this IServiceCollection services, 
     	string claimType = "Permission")
     	=> services.AddAuthorizationBuilder()
     		{{~ for p in policies ~}}
         	.AddPolicy({{ p.class_path }}.Name, p => {
-        		{{~ if p.Claims ~}}
+        		{{~ if p.claims ~}}
         		p.RequireClaim(claimType, {{ p.class_path }}.Claims);
         		{{~ end ~}}
-        		{{~ if p.Roles ~}}
+        		{{~ if p.roles ~}}
         		p.RequireRole({{ p.class_path }}.Roles);
         		{{~ end ~}}
-        		{{~ if p.AuthenticationSchemes ~}}
+        		{{~ if p.authentication_schemes ~}}
         		p.AuthenticationSchemes = {{ p.class_path }}.AuthenticationSchemes;
         		{{~ end ~}}
         	})

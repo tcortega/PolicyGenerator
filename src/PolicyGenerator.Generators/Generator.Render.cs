@@ -6,18 +6,6 @@ namespace PolicyGenerator.Generators;
 
 public sealed partial class PoliciesGenerator
 {
-	private static void RenderPolicy(SourceProductionContext context, PolicyDescriptor policy, string assemblyName,
-		Template template)
-	{
-		var ct = context.CancellationToken;
-		ct.ThrowIfCancellationRequested();
-
-		var source = template.Render(new { Assembly = assemblyName, Policy = policy });
-
-		ct.ThrowIfCancellationRequested();
-		context.AddSource($"Authorization.Policies.{policy.Name}Policy.g.cs", source);
-	}
-
 	private static void RenderPolicies(SourceProductionContext context, ImmutableArray<PolicyDescriptor> policies,
 		string assemblyName, Template template)
 	{
@@ -27,7 +15,10 @@ public sealed partial class PoliciesGenerator
 		var ct = context.CancellationToken;
 		ct.ThrowIfCancellationRequested();
 
-		var source = template.Render(new { Assembly = assemblyName, Policies = policies });
+		var allClaims = policies.SelectMany(x => x.Claims)
+			.Where(x => !string.IsNullOrWhiteSpace(x));
+
+		var source = template.Render(new { Assembly = assemblyName, Policies = policies, AllClaims = allClaims });
 
 		ct.ThrowIfCancellationRequested();
 		context.AddSource("Authorization.Policies.g.cs", source);
