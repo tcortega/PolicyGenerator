@@ -16,7 +16,18 @@ public sealed partial class PoliciesGenerator
 		if (GetValidPolicyName(symbol) is not { } policyName)
 			return null;
 
-		if (GetValidClaims(context, symbol) is not { Length: > 0 } claims)
+		token.ThrowIfCancellationRequested();
+
+		var claims = GetFieldValues("Claims", context, symbol);
+		token.ThrowIfCancellationRequested();
+
+		var roles = GetFieldValues("Roles", context, symbol);
+		token.ThrowIfCancellationRequested();
+
+		var authenticationSchemes = GetFieldValues("AuthenticationSchemes", context, symbol);
+		token.ThrowIfCancellationRequested();
+
+		if (claims is null && roles is null && authenticationSchemes is null)
 			return null;
 
 		token.ThrowIfCancellationRequested();
@@ -24,7 +35,9 @@ public sealed partial class PoliciesGenerator
 		return new PolicyDescriptor
 		{
 			Name = policyName,
-			Claims = string.Join(",", claims),
+			Claims = claims is null ? null : string.Join(",", claims),
+			Roles = roles,
+			AuthenticationSchemes = authenticationSchemes,
 			ClassPath = symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
 		};
 	}
@@ -36,11 +49,11 @@ public sealed partial class PoliciesGenerator
 			.FirstOrDefault(p => p.Name == "Name")?.ConstantValue as string;
 	}
 
-	private static string[]? GetValidClaims(GeneratorAttributeSyntaxContext context, INamespaceOrTypeSymbol symbol)
+	private static string[]? GetFieldValues(string fieldName, GeneratorAttributeSyntaxContext context, INamespaceOrTypeSymbol symbol)
 	{
 		var fieldSymbol = symbol.GetMembers()
 			.OfType<IFieldSymbol>()
-			.FirstOrDefault(p => p.Name == "Claims");
+			.FirstOrDefault(p => p.Name == fieldName);
 
 		if (fieldSymbol is not { IsStatic: true, DeclaringSyntaxReferences.Length: > 0 }) return null;
 
@@ -50,12 +63,12 @@ public sealed partial class PoliciesGenerator
 
 		var semanticModel = context.SemanticModel;
 		return collectionExpression.Elements
-			.Select(s => GetClaimValue(s, semanticModel))
+			.Select(s => GetStringValue(s, semanticModel))
 			.Where(value => value != null)
 			.ToArray()!;
 	}
 
-	private static string? GetClaimValue(CollectionElementSyntax syntax, SemanticModel semanticModel)
+	private static string? GetStringValue(CollectionElementSyntax syntax, SemanticModel semanticModel)
 	{
 		if (syntax is not ExpressionElementSyntax expression) return null;
 

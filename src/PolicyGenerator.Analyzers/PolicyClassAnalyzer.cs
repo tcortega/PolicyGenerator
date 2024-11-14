@@ -17,14 +17,14 @@ public class PolicyClassAnalyzer : DiagnosticAnalyzer
 		description: "Classes annotated with a Policy attribute should have a 'Name' field."
 	);
 
-	public static readonly DiagnosticDescriptor ClaimsFieldMustExist = new(
-		id: DiagnosticIds.PG0002ClaimsFieldMustExist,
-		title: "Policy type must have a Claims field",
-		messageFormat: "Policy type '{0}' must have a 'Claims' field",
+	public static readonly DiagnosticDescriptor RequiredFieldsMissing = new(
+		id: DiagnosticIds.PG0002RequiredFieldsMissing,
+		title: "Policy type must have at least one required field",
+		messageFormat: "Policy type '{0}' must have at least one of these fields: 'Claims', 'Roles', or 'AuthenticationSchemes'",
 		category: "PolicyGenerator",
 		defaultSeverity: DiagnosticSeverity.Error,
 		isEnabledByDefault: true,
-		description: "Classes annotated with a Policy attribute should have a 'Claims' field."
+		description: "Classes annotated with a Policy attribute must have at least one of: Claims, Roles, or AuthenticationSchemes fields."
 	);
 
 	public static readonly DiagnosticDescriptor NameFieldMustBeStaticOrConst = new(
@@ -37,14 +37,14 @@ public class PolicyClassAnalyzer : DiagnosticAnalyzer
 		description: "The Name field of a Policy type must be static or const."
 	);
 
-	public static readonly DiagnosticDescriptor ClaimsFieldMustBeStatic = new(
-		id: DiagnosticIds.PG0004ClaimsFieldMustBeStatic,
-		title: "Policy type Claims field must be static",
-		messageFormat: "Policy type '{0}' Claims field must be static",
+	public static readonly DiagnosticDescriptor RequiredFieldMustBeStatic = new(
+		id: DiagnosticIds.PG0004RequiredFieldMustBeStatic,
+		title: "Policy type required field must be static",
+		messageFormat: "Policy type '{0}' field '{1}' must be static",
 		category: "PolicyGenerator",
 		defaultSeverity: DiagnosticSeverity.Error,
 		isEnabledByDefault: true,
-		description: "The Claims field of a Policy type must be static."
+		description: "The Claims, Roles, and AuthenticationSchemes fields of a Policy type must be static."
 	);
 
 	public static readonly DiagnosticDescriptor NameFieldMustBeString = new(
@@ -57,23 +57,23 @@ public class PolicyClassAnalyzer : DiagnosticAnalyzer
 		description: "The Name field of a Policy type must be string."
 	);
 
-	public static readonly DiagnosticDescriptor ClaimsFieldMustBeStringCollection = new(
-		id: DiagnosticIds.PG0006ClaimsFieldMustBeStringCollection,
-		title: "Policy type Claims field must be string collection",
-		messageFormat: "Policy type '{0}' Claims field must be string collection",
+	public static readonly DiagnosticDescriptor RequiredFieldMustBeStringCollection = new(
+		id: DiagnosticIds.PG0006RequiredFieldMustBeStringCollection,
+		title: "Policy type required field must be string collection",
+		messageFormat: "Policy type '{0}' field '{1}' must be string collection",
 		category: "PolicyGenerator",
 		defaultSeverity: DiagnosticSeverity.Error,
 		isEnabledByDefault: true,
-		description: "The Claims field of a Policy type must be string collection."
+		description: "The Claims, Roles, and AuthenticationSchemes fields of a Policy type must be string collections."
 	);
 
 	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create([
 		NameFieldMustExist,
-		ClaimsFieldMustExist,
+		RequiredFieldsMissing,
 		NameFieldMustBeStaticOrConst,
-		ClaimsFieldMustBeStatic,
+		RequiredFieldMustBeStatic,
 		NameFieldMustBeString,
-		ClaimsFieldMustBeStringCollection
+		RequiredFieldMustBeStringCollection
 	]);
 
 	public override void Initialize(AnalysisContext context)
@@ -106,6 +106,12 @@ public class PolicyClassAnalyzer : DiagnosticAnalyzer
 
 		token.ThrowIfCancellationRequested();
 
+		AnalyzeNameField(context, symbol);
+		AnalyzeRequiredFields(context, symbol);
+	}
+
+	private static void AnalyzeNameField(SymbolAnalysisContext context, INamedTypeSymbol symbol)
+	{
 		var nameField = symbol.GetMembers().OfType<IFieldSymbol>().FirstOrDefault(f => f.Name == "Name");
 		if (nameField == null)
 		{
@@ -124,25 +130,35 @@ public class PolicyClassAnalyzer : DiagnosticAnalyzer
 				context.ReportDiagnostic(Diagnostic.Create(NameFieldMustBeString, nameField.Locations[0], symbol.Name));
 			}
 		}
+	}
 
-		var claimsField = symbol.GetMembers().OfType<IFieldSymbol>().FirstOrDefault(f => f.Name == "Claims");
-		if (claimsField == null)
+	private static void AnalyzeRequiredFields(SymbolAnalysisContext context, INamedTypeSymbol symbol)
+	{
+		var requiredFieldNames = new[] { "Claims", "Roles", "AuthenticationSchemes" };
+		var fields = symbol.GetMembers()
+			.OfType<IFieldSymbol>()
+			.Where(f => requiredFieldNames.Contains(f.Name))
+			.ToList();
+
+		if (fields.Count == 0)
 		{
-			context.ReportDiagnostic(Diagnostic.Create(ClaimsFieldMustExist, symbol.Locations[0], symbol.Name));
+			context.ReportDiagnostic(Diagnostic.Create(RequiredFieldsMissing, symbol.Locations[0], symbol.Name));
+			return;
 		}
-		else
+
+		foreach (var field in fields)
 		{
-			if (claimsField is { IsStatic: false })
+			if (!field.IsStatic)
 			{
-				context.ReportDiagnostic(Diagnostic.Create(ClaimsFieldMustBeStatic, claimsField.Locations[0],
-					symbol.Name));
+				context.ReportDiagnostic(Diagnostic.Create(RequiredFieldMustBeStatic, field.Locations[0],
+					symbol.Name, field.Name));
 			}
 
-			var isStringEnumerable = IsIEnumerableOfString(claimsField.Type);
+			var isStringEnumerable = IsIEnumerableOfString(field.Type);
 			if (!isStringEnumerable)
 			{
-				context.ReportDiagnostic(Diagnostic.Create(ClaimsFieldMustBeStringCollection, claimsField.Locations[0],
-					symbol.Name));
+				context.ReportDiagnostic(Diagnostic.Create(RequiredFieldMustBeStringCollection, field.Locations[0],
+					symbol.Name, field.Name));
 			}
 		}
 	}

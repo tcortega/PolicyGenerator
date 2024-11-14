@@ -15,7 +15,17 @@ public static partial class {{ assembly }}PolicyRegister
     	string claimType = "Permission")
     	=> services.AddAuthorizationBuilder()
     		{{~ for p in policies ~}}
-        	.AddPolicy({{ p.class_path }}.Name, p => p.RequireClaim(claimType, {{ p.class_path }}.Claims))
+        	.AddPolicy({{ p.class_path }}.Name, p => {
+        		{{~ if p.Claims ~}}
+        		p.RequireClaim(claimType, {{ p.class_path }}.Claims);
+        		{{~ end ~}}
+        		{{~ if p.Roles ~}}
+        		p.RequireRole({{ p.class_path }}.Roles);
+        		{{~ end ~}}
+        		{{~ if p.AuthenticationSchemes ~}}
+        		p.AuthenticationSchemes = {{ p.class_path }}.AuthenticationSchemes;
+        		{{~ end ~}}
+        	})
         	{{~ end ~}}
         	;
 }
