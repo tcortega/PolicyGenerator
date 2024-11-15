@@ -1,12 +1,17 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using PolicyGenerator.Generators;
 using PolicyGenerator.Tests.Helpers;
 
 namespace PolicyGenerator.Tests.GeneratorTests;
+
 public static class GeneratorTestHelper
 {
-	public static GeneratorDriverRunResult RunGenerator(string source, DriverReferenceAssemblies assemblies)
+	public static GeneratorDriverRunResult RunGenerator(
+		[StringSyntax("c#-test")] string source,
+		DriverReferenceAssemblies assemblies
+	)
 	{
 		var syntaxTree = CSharpSyntaxTree.ParseText(source);
 

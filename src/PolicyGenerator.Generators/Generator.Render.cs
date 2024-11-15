@@ -15,9 +15,10 @@ public sealed partial class PoliciesGenerator
 		var ct = context.CancellationToken;
 		ct.ThrowIfCancellationRequested();
 
-		var allClaims = policies.SelectMany(x => x.Claims)
+		var mergedClaims = policies.SelectMany(x => x.Claims)
 			.Where(x => !string.IsNullOrWhiteSpace(x));
 
+		var allClaims = string.Join(", ", mergedClaims);
 		var source = template.Render(new { Assembly = assemblyName, Policies = policies, AllClaims = allClaims });
 
 		ct.ThrowIfCancellationRequested();

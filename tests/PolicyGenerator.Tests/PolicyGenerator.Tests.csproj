@@ -4,6 +4,10 @@
 	<NoWarn>$(NoWarn);NU1903</NoWarn>
   </PropertyGroup>
 
+	<ItemGroup Label="Usings">
+		<Using Include="Xunit" />
+	</ItemGroup>
+
   <ItemGroup>
 	<PackageReference Include="Basic.Reference.Assemblies.Net80" />
 	<PackageReference Include="coverlet.collector" PrivateAssets="All" />
