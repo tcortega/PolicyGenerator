@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Scriban;
 
@@ -15,11 +15,19 @@ public sealed partial class PoliciesGenerator
 		var ct = context.CancellationToken;
 		ct.ThrowIfCancellationRequested();
 
-		var mergedClaims = policies.SelectMany(x => x.Claims)
-			.Where(x => !string.IsNullOrWhiteSpace(x));
-
+		var mergedClaims = policies.Where(x => x.Claims != null)
+			.SelectMany(x => x.Claims);
 		var allClaims = string.Join(", ", mergedClaims);
-		var source = template.Render(new { Assembly = assemblyName, Policies = policies, AllClaims = allClaims });
+
+		ct.ThrowIfCancellationRequested();
+
+		var mergedRoles = policies.Where(x => x.Roles != null)
+			.SelectMany(x => x.Roles);
+		var allRoles = string.Join(", ", mergedRoles);
+
+		ct.ThrowIfCancellationRequested();
+
+		var source = template.Render(new { Assembly = assemblyName, Policies = policies, AllClaims = allClaims, AllRoles = allRoles });
 
 		ct.ThrowIfCancellationRequested();
 		context.AddSource("Authorization.Policies.g.cs", source);

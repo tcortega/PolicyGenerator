@@ -10,10 +10,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".root", ".root", "{F030B953-C4F3-40A7-9C13-63FEC7D11155}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
 		Directory.Build.props = Directory.Build.props
 		Directory.Packages.props = Directory.Packages.props
 		README.md = README.md
-		.gitattributes = .gitattributes
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{F5ACFE56-5F6C-4AC9-887F-D95C55304378}"
@@ -29,6 +29,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{7587C69D-725B-4570-B65A-C0A40A46FFAE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PolicyGenerator.Tests", "tests\PolicyGenerator.Tests\PolicyGenerator.Tests.csproj", "{E46CD790-0C88-4E17-8040-42F1C7AA093C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "tests\Api\Api.csproj", "{FBEAC9B6-4961-4DF7-8A3F-6F6CCE68C039}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,6 +54,10 @@ Global
 		{E46CD790-0C88-4E17-8040-42F1C7AA093C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E46CD790-0C88-4E17-8040-42F1C7AA093C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E46CD790-0C88-4E17-8040-42F1C7AA093C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBEAC9B6-4961-4DF7-8A3F-6F6CCE68C039}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBEAC9B6-4961-4DF7-8A3F-6F6CCE68C039}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBEAC9B6-4961-4DF7-8A3F-6F6CCE68C039}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBEAC9B6-4961-4DF7-8A3F-6F6CCE68C039}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +68,7 @@ Global
 		{8C835E2A-B928-481C-A617-97CE35A0882F} = {E0C310E0-3CBA-485A-9B47-0E50A0C2A88E}
 		{32840642-27E7-4045-81C9-CCD2B6CC0E21} = {E0C310E0-3CBA-485A-9B47-0E50A0C2A88E}
 		{E46CD790-0C88-4E17-8040-42F1C7AA093C} = {7587C69D-725B-4570-B65A-C0A40A46FFAE}
+		{FBEAC9B6-4961-4DF7-8A3F-6F6CCE68C039} = {7587C69D-725B-4570-B65A-C0A40A46FFAE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {958BC85E-B892-4A9D-9749-D40DAF57D162}

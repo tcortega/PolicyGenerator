@@ -6,6 +6,7 @@ namespace Microsoft.AspNetCore.Authorization;
 public static partial class {{ assembly }}PolicyRegister
 {
     public static string[] AllClaims = [{{ all_claims }}];
+	public static string[] AllRoles = [{{ all_roles }}];
 
     public static AuthorizationBuilder Add{{ assembly }}Policies(this IServiceCollection services, 
     	string claimType = "Permission")
