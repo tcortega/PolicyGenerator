@@ -1,14 +1,14 @@
 name: Build
 
-on:
+on: 
   workflow_dispatch:
   push:
-    branches:
+    branches: 
       - 'master'
     paths-ignore:
       - '**/readme.md'
   pull_request:
-    types: [ opened, synchronize, reopened ]
+    types: [opened, synchronize, reopened]
 
 jobs:
   build:
@@ -16,15 +16,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: |
-            8.0.x
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: |
+          8.0.x
 
-      - name: Restore dependencies
-        run: dotnet restore
-      - name: Build
-        run: dotnet build -c Release --no-restore
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build -c Release --no-restore
+    - name: Test
+      run: dotnet test -c Release --no-build --logger GitHubActions
