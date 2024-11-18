@@ -20,6 +20,7 @@ public static partial class {{ assembly }}PolicyRegister
         		{{~ end ~}}
         		{{~ if p.authentication_schemes ~}}
         		p.AuthenticationSchemes = {{ p.class_path }}.AuthenticationSchemes;
+				p.RequireAuthenticatedUser();
         		{{~ end ~}}
         	})
         	{{~ end ~}}

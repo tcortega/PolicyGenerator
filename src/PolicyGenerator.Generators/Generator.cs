@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
@@ -28,7 +27,6 @@ public sealed partial class PoliciesGenerator : IIncrementalGenerator
 				.Trim()
 			);
 
-		_ = Debugger.Launch();
 		var allPoliciesTemplate = Utility.GetTemplate("Policies");
 		context.RegisterSourceOutput(
 			policies.Collect().Combine(assemblyName),

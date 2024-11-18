@@ -1,30 +1,41 @@
-using PolicyGenerator.Tests.Helpers;
-
 namespace PolicyGenerator.Tests.GeneratorTests;
-public class PolicyTests
+
+public sealed class PolicyTests
 {
-	[Theory]
-	[InlineData(DriverReferenceAssemblies.Normal)]
-	public void ShouldGenerateForValidPolicy(DriverReferenceAssemblies assemblies)
+	[Test]
+	public async Task ShouldGenerateForValidPolicies()
 	{
 		var result = GeneratorTestHelper.RunGenerator(
 			"""
 			using PolicyGenerator;
 
-			namespace Dummy;
+			namespace Foo;
 
 			[Policy]
-			public static class DummyPolicy
+			public static class FooPolicy
 			{
-				public const string Name = "DummyPolicy";
-				public static readonly string[] Claims = ["dummy"];
+				public const string Name = "FooPolicy";
+				public static readonly string[] Claims = ["Foo"];
+				public static readonly string[] Roles = ["admin"];
+				public static readonly string[] AuthenticationSchemes = ["hello"];
 			}
-			""",
-			assemblies);
 
-		Assert.Null(result);
+			[Policy]
+			public static class BarPolicy
+			{
+				public const string Name = "BarPolicy";
+				public static readonly string[] Claims = ["Bar"];
+			}
+			""");
 
-		// _ = await Verify(result)
-		// 	.UseParameters(string.Join("_", assemblies));
+		Assert.Equal(
+			[
+				@"PolicyGenerator.Generators/PolicyGenerator.Generators.PoliciesGenerator/PolicyAttribute.g.cs",
+				@"PolicyGenerator.Generators/PolicyGenerator.Generators.PoliciesGenerator/Authorization.Policies.g.cs",
+			],
+			result.GeneratedTrees.Select(t => t.FilePath.Replace('\\', '/'))
+		);
+
+		_ = await Verify(result);
 	}
 }

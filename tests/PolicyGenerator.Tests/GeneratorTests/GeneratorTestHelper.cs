@@ -1,17 +1,11 @@
-using System.Diagnostics.CodeAnalysis;
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis;
 using PolicyGenerator.Generators;
-using PolicyGenerator.Tests.Helpers;
 
 namespace PolicyGenerator.Tests.GeneratorTests;
-
 public static class GeneratorTestHelper
 {
-	public static GeneratorDriverRunResult RunGenerator(
-		[StringSyntax("c#-test")] string source,
-		DriverReferenceAssemblies assemblies
-	)
+	public static GeneratorDriverRunResult RunGenerator(string source)
 	{
 		var syntaxTree = CSharpSyntaxTree.ParseText(source);
 
@@ -20,8 +14,8 @@ public static class GeneratorTestHelper
 			syntaxTrees: [syntaxTree],
 			references:
 			[
-				.. Basic.Reference.Assemblies.Net80.References.All,
-				.. assemblies.GetAdditionalReferences(),
+				.. Basic.Reference.Assemblies.AspNet80.References.All,
+				.. Utility.GetMetadataReferences(),
 			],
 			options: new(
 				outputKind: OutputKind.DynamicallyLinkedLibrary
@@ -31,7 +25,7 @@ public static class GeneratorTestHelper
 		var generator = new PoliciesGenerator();
 
 		var driver = CSharpGeneratorDriver
-			.Create(generator)
+			.Create(new PoliciesGenerator())
 			.RunGeneratorsAndUpdateCompilation(
 				compilation,
 				out var outputCompilation,

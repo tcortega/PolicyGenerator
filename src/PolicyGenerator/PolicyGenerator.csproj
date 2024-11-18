@@ -1,48 +1,49 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
-		<IsPackable>true</IsPackable>
-		<IncludeBuildOutput>false</IncludeBuildOutput>
-	</PropertyGroup>
+  <PropertyGroup>
+	<TargetFramework>net8.0</TargetFramework>
+	<IsPackable>true</IsPackable>
+	<IncludeBuildOutput>false</IncludeBuildOutput>
+  </PropertyGroup>
 
-	<PropertyGroup Label="Nuget">
-		<Title>PolicyGenerator</Title>
-		<Description>A source generator for generating policies with claims and registering them automatically.</Description>
+  <PropertyGroup Label="Nuget">
+	<Title>PolicyGenerator</Title>
+	<Description>A source generator for generating policies with claims and registering them automatically.</Description>
 
-		<Authors>tcortega</Authors>
+	<Authors>tcortega</Authors>
 
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageReadmeFile>readme.md</PackageReadmeFile>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<PackageReadmeFile>readme.md</PackageReadmeFile>
 
-		<PublishRepositoryUrl>true</PublishRepositoryUrl>
-		<RepositoryUrl>https://github.com/tcortega/PolicyGenerator</RepositoryUrl>
-	</PropertyGroup>
+	<PublishRepositoryUrl>true</PublishRepositoryUrl>
+	<RepositoryUrl>https://github.com/tcortega/PolicyGenerator</RepositoryUrl>
+  </PropertyGroup>
 
-	<!--
+  <!--
 	This ensures the library will be packaged as a source generator when we use `dotnet pack`
 	-->
-	<ItemGroup>
-		<None Include="../../readme.md" Pack="true" PackagePath="/"/>
-		<None Include="$(PkgScriban)/lib/netstandard2.0/Scriban.dll" Pack="true" PackagePath="analyzers/roslyn4.8/dotnet/cs" Visible="false"/>
-		<None Include="../PolicyGenerator.Analyzers/bin/$(Configuration)/netstandard2.0/PolicyGenerator.Analyzers.dll" Pack="true" PackagePath="analyzers/roslyn4.8/dotnet/cs" Visible="true"/>
-		<None Include="../PolicyGenerator.Generators/bin/$(Configuration)/netstandard2.0/PolicyGenerator.Generators.dll" Pack="true" PackagePath="analyzers/roslyn4.8/dotnet/cs" Visible="true"/>
-	</ItemGroup>
+  <ItemGroup>
+	<None Include="../../readme.md" Pack="true" PackagePath="/"/>
+	<None Include="$(PkgScriban)/lib/netstandard2.0/Scriban.dll" Pack="true" PackagePath="analyzers/roslyn4.8/dotnet/cs" Visible="false"/>
+	<None Include="../PolicyGenerator.Analyzers/bin/$(Configuration)/netstandard2.0/PolicyGenerator.Analyzers.dll" Pack="true" PackagePath="analyzers/roslyn4.8/dotnet/cs" Visible="true"/>
+	<None Include="../PolicyGenerator.Generators/bin/$(Configuration)/netstandard2.0/PolicyGenerator.Generators.dll" Pack="true" PackagePath="analyzers/roslyn4.8/dotnet/cs" Visible="true"/>
+  </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Scriban" PrivateAssets="all" GeneratePathProperty="true"/>
-		<PackageReference Include="MinVer" PrivateAssets="all"/>
-	</ItemGroup>
+  <ItemGroup>
+	<PackageReference Include="DotNet.ReproducibleBuilds" PrivateAssets="All" />
+	<PackageReference Include="Scriban" PrivateAssets="all" GeneratePathProperty="true"/>
+	<PackageReference Include="MinVer" PrivateAssets="all"/>
+  </ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="../PolicyGenerator.Analyzers/PolicyGenerator.Analyzers.csproj" ReferenceOutputAssembly="false"/>
-		<ProjectReference Include="../PolicyGenerator.Generators/PolicyGenerator.Generators.csproj" ReferenceOutputAssembly="false"/>
-	</ItemGroup>
+  <ItemGroup>
+	<ProjectReference Include="../PolicyGenerator.Analyzers/PolicyGenerator.Analyzers.csproj" ReferenceOutputAssembly="false"/>
+	<ProjectReference Include="../PolicyGenerator.Generators/PolicyGenerator.Generators.csproj" ReferenceOutputAssembly="false"/>
+  </ItemGroup>
 
-	<PropertyGroup Label="MinVer">
-		<MinVerAutoIncrement>minor</MinVerAutoIncrement>
-		<MinVerDefaultPreReleaseIdentifiers>preview.0</MinVerDefaultPreReleaseIdentifiers>
-		<MinVerTagPrefix>v</MinVerTagPrefix>
-	</PropertyGroup>
+  <PropertyGroup Label="MinVer">
+	<MinVerAutoIncrement>minor</MinVerAutoIncrement>
+	<MinVerDefaultPreReleaseIdentifiers>preview.0</MinVerDefaultPreReleaseIdentifiers>
+	<MinVerTagPrefix>v</MinVerTagPrefix>
+  </PropertyGroup>
 
 </Project>

@@ -1,38 +1,35 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+	<TargetFramework>net8.0</TargetFramework>
 	<NoWarn>$(NoWarn);NU1903</NoWarn>
   </PropertyGroup>
 
-	<ItemGroup Label="Usings">
-		<Using Include="Xunit" />
-	</ItemGroup>
+  <ItemGroup Label="Usings">
+	<Using Include="Xunit" />
+  </ItemGroup>
 
   <ItemGroup>
-	<PackageReference Include="Basic.Reference.Assemblies.Net80" />
+	<PackageReference Include="Basic.Reference.Assemblies.AspNet80" />
 	<PackageReference Include="coverlet.collector" PrivateAssets="All" />
 	<PackageReference Include="coverlet.msbuild" PrivateAssets="All" />
 	<PackageReference Include="GitHubActionsTestLogger" PrivateAssets="All" />
+	<PackageReference Include="Microsoft.AspNetCore.Authorization" />
 	<PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
-	<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing.XUnit" />
-	<PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeFix.Testing.XUnit" />
+	<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing" />
+	<PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeFix.Testing" />
 	<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" />
 	<PackageReference Include="Microsoft.Extensions.DependencyInjection" />
-	<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
-	<PackageReference Include="Microsoft.NET.Test.Sdk" />
+	<PackageReference Include="Scriban" />
+	<PackageReference Include="TUnit.Engine" />
 	<PackageReference Include="Verify.SourceGenerators" />
-	<PackageReference Include="Verify.Xunit" />
-	<PackageReference Include="xunit" />
-	<PackageReference Include="xunit.runner.visualstudio" PrivateAssets="all" />
+	<PackageReference Include="Verify.TUnit" />
+	<PackageReference Include="xunit.v3.assert" />
   </ItemGroup>
 
   <ItemGroup>
-	<ProjectReference Include="../../src/PolicyGenerator.Analyzers/PolicyGenerator.Analyzers.csproj" />
-	<ProjectReference Include="../../src/PolicyGenerator.Generators/PolicyGenerator.Generators.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-	<Compile Include="../../src/PolicyGenerator.Analyzers/DiagnosticIds.cs" />
+    <ProjectReference Include="..\..\src\PolicyGenerator.Analyzers\PolicyGenerator.Analyzers.csproj" />
+    <ProjectReference Include="..\..\src\PolicyGenerator.Generators\PolicyGenerator.Generators.csproj" />
   </ItemGroup>
 
 </Project>
